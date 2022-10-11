@@ -17,3 +17,6 @@ q8 | [0-9] | q8
 q8 | . | qf
 q7 | . | qf
 estado final: qf
+on | q5 | registrar_tipo
+on | q7 | registrar_id
+on | qf | registrar_valor
