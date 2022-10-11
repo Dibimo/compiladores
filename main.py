@@ -1,17 +1,18 @@
+from enum import auto
 from Automato import Automato
 
 
-automato_teste = Automato('nomes_variaveis copy.automato')
-tabela_simbolos = []
+automato_variavel  = Automato('nomes_variaveis copy.automato')
+automato_comeco_final = Automato('comeco_final.automato')
 
-automato_teste.analizar_entrada('int a = 10.')
-tabela_simbolos.append(automato_teste.retorna_tupla())
+with open('programa1.exm') as file:
+    lines = file.readlines()
+    lines = [line.rstrip() for line in lines]
 
-automato_teste.analizar_entrada('float b = 11,4.')
-tabela_simbolos.append(automato_teste.retorna_tupla())
-
-automato_teste.analizar_entrada('int c = 0.')
-tabela_simbolos.append(automato_teste.retorna_tupla())
-
-
-print(tabela_simbolos)
+for l in lines:
+    eh_variavel = automato_variavel.analizar_entrada(l)
+    eh_comeco = automato_comeco_final.analizar_entrada(l)
+    if(eh_variavel):
+        print('variavel')
+        continue
+    print('não variavel')
