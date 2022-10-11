@@ -1,6 +1,7 @@
-from ASD import ASD
+from Automato import Automato
 
-asd = ASD('(a*b)+(a)*(b*a+a)()$')
 
-asd.iniciar()
+automato_teste = Automato('nomes_variaveis copy.automato')
 
+resultado = automato_teste.analizar_entrada('int c = 0.')
+print(resultado)

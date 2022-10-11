@@ -1,0 +1,5 @@
+estado inicial: q0
+q0 | [a-z] | q1
+q0 | [0-9] | qm
+q1 | [a-z][0-9] | q1
+estado final: q1
