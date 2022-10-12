@@ -1,18 +1,14 @@
-from enum import auto
 from Automato import Automato
 
 
-automato_variavel  = Automato('nomes_variaveis copy.automato')
-automato_comeco_final = Automato('comeco_final.automato')
+automato_geral = Automato('./automatos/automato_geral.automato')
 
-with open('programa1.exm') as file:
-    lines = file.readlines()
-    lines = [line.rstrip() for line in lines]
-
-for l in lines:
-    eh_variavel = automato_variavel.analizar_entrada(l)
-    eh_comeco = automato_comeco_final.analizar_entrada(l)
-    if(eh_variavel):
-        print('variavel')
-        continue
-    print('não variavel')
+print(automato_geral.analizar_entrada('int float'))
+# print(automato_geral.analizar_entrada('float'))
+# print(automato_geral.analizar_entrada('comeco'))
+# print(automato_geral.analizar_entrada('final'))
+# print(automato_geral.analizar_entrada('5623'))
+# print(automato_geral.analizar_entrada('5623,56'))
+# print(automato_geral.analizar_entrada('teste'))
+# print(automato_geral.analizar_entrada('teste2'))
+# print(automato_geral.analizar_entrada('2teste2'))

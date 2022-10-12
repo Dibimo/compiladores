@@ -1,0 +1,36 @@
+estado inicial: q0
+q0 | i | q1
+q1 | n | q2
+q2 | t | q3
+##
+q0 | f | q4
+q4 | l | q5
+q5 | o | q6
+q6 | a | q7
+q7 | t | q8
+##
+q0  | c | q11
+q11 | o | q12
+q12 | m | q13
+q13 | e | q14
+q14 | c | q15
+q15 | o | q16
+##
+q0  | f | q4
+q4  | i | q18
+q18 | n | q19
+q19 | a | q20
+q20 | l | q21
+##
+q0  | [0-9] | q22
+q22 | [0-9] | q22
+q22 |   ,   | q23
+q23 | [0-9] | q23
+##
+estado final: q3 q8 q16 q21 q22 q23
+q3 classe int
+q8 classe float
+q16 classe incioDePrograma
+q21 classe finalDePrograma
+q22 classe numeroInteiro
+q23 classe numeroReal
