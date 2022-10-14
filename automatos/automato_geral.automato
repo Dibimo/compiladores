@@ -1,36 +1,45 @@
 estado inicial: q0
-q0 | i | q1
-q1 | n | q2
-q2 | t | q3
+q0 | I | q1
+q1 | N | q2
+q2 | T | q3
 ##
-q0 | f | q4
-q4 | l | q5
-q5 | o | q6
-q6 | a | q7
-q7 | t | q8
+q0 | F | q4
+q4 | L | q5
+q5 | O | q6
+q6 | A | q7
+q7 | T | q8
 ##
-q0  | c | q11
-q11 | o | q12
-q12 | m | q13
-q13 | e | q14
-q14 | c | q15
-q15 | o | q16
+q0  | C | q11
+q11 | O | q12
+q12 | M | q13
+q13 | E | q14
+q14 | C | q15
+q15 | O | q16
 ##
-q0  | f | q4
-q4  | i | q18
-q18 | n | q19
-q19 | a | q20
-q20 | l | q21
+q0  | F | q4
+q4  | I | q18
+q18 | N | q19
+q19 | A | q20
+q20 | L | q21
 ##
-q0  | [0-9] | q22
-q22 | [0-9] | q22
-q22 |   ,   | q23
-q23 | [0-9] | q23
+q0  | [a-z] | q22
+q22 | [a-z] | q22
+q22 | _ | q22
+q22 | - | q22
 ##
-estado final: q3 q8 q16 q21 q22 q23
+q0   | [0-9] | q23
+q23  | [0-9] | q23
+q23  |   ,   | q24
+q24  | [0-9] | q24
+##
+q0 | = | q25
+estado final: q3 q8 q16 q21 q22 q23 q24 q25
 q3 classe int
 q8 classe float
 q16 classe incioDePrograma
 q21 classe finalDePrograma
-q22 classe numeroInteiro
-q23 classe numeroReal
+q22 classe variavel
+q23 classe numeroInteiro
+q24 classe numeroFloat
+q25 classe atribuicao
+

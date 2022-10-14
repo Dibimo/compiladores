@@ -60,7 +60,9 @@ class Automato:
         # entrada = entrada.replace(' ', '')
         estado_atual = self.estado_inicial
         for e in entrada:
-            if(e in ' '):
+            if(e in ' ' or e in '.'):
+                if(estado_atual in self.estado_final):
+                    self.adiciona_classe_simbolo(estado_atual)
                 estado_atual = self.estado_inicial
                 continue
             if(not estado_atual + e in self.estados):
@@ -77,8 +79,6 @@ class Automato:
             if(estado_atual in self.acoes):
                 self.acoes[estado_atual]()
 
-            if(estado_atual in self.estado_final):
-                self.adiciona_classe_simbolo(estado_atual)
         return self.retorna_classe_simbolo()
 
     def adiciona_classe_simbolo(self, estado):

@@ -1,5 +1,10 @@
-int idade = 21.
-float saldo = 400,50.
-$comeco
+INT idade = 21.
+FLOAT saldo = 400,50.
+$COMECO
 
-$final
+$FINAL
+
+
+-- palavras reservadas tem que ser upper
+-- variaveis tem que ser lower não pode começar com numero
+
