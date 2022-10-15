@@ -4,6 +4,7 @@ def retorna_dicionario(chave):
         '[a-z]': string.ascii_lowercase,
         '[A-Z]': string.ascii_uppercase,
         '[0-9]': string.digits,
+        # '[s]': string.whitespace,
         '[*]': string.digits + string.ascii_letters + '.=' + string.whitespace,
         '[a-z][0-9]': string.ascii_lowercase + string.ascii_uppercase + string.digits,
     }

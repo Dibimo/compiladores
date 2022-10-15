@@ -52,37 +52,33 @@ class Automato:
 
 
     def analizar_entrada(self, entrada):
-        self.tipo = ''
-        self.id = ''
-        self.valor = ''
-        self.pilha = ''
         self.classes_simbolos = ''
-        # entrada = entrada.replace(' ', '')
+        # entrada = entrada.replace(' ', '#')
+        entrada_array = entrada.split(' ')
         estado_atual = self.estado_inicial
-        for e in entrada:
-            if(e in ' ' or e in '.'):
+        for simbolo in entrada_array:
+            estado_atual = self.estado_inicial
+            self.classes_simbolos += ' '
+            for e in simbolo:
+                if(not estado_atual + e in self.estados):
+                    return (False, e)
+
+                estado_atual = self.estados[estado_atual + e]
+                    # estado_atual = self.estado_inicial
+
+                if(estado_atual == 'qm'):
+                    return (False, e)
+
                 if(estado_atual in self.estado_final):
+                    if(e in '.'):
+                        self.classes_simbolos += ' '
                     self.adiciona_classe_simbolo(estado_atual)
-                estado_atual = self.estado_inicial
-                continue
-            if(not estado_atual + e in self.estados):
-                return False
-
-            if(not e in '=.'):
-                self.pilha += e
-
-            estado_atual = self.estados[estado_atual + e]
-
-            if(estado_atual == 'qm'):
-                return False
-
-            if(estado_atual in self.acoes):
-                self.acoes[estado_atual]()
 
         return self.retorna_classe_simbolo()
 
     def adiciona_classe_simbolo(self, estado):
-        self.classes_simbolos += self.classes[estado] + ' '
+        if (not self.classes[estado] in self.classes_simbolos):
+            self.classes_simbolos += self.classes[estado]
 
     def retorna_classe_simbolo(self):
         return self.classes_simbolos

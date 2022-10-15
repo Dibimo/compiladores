@@ -24,22 +24,32 @@ q20 | L | q21
 ##
 q0  | [a-z] | q22
 q22 | [a-z] | q22
+q22 | [0-9] | q22
 q22 | _ | q22
 q22 | - | q22
 ##
 q0   | [0-9] | q23
+q23  | [a-z] | qm
 q23  | [0-9] | q23
 q23  |   ,   | q24
 q24  | [0-9] | q24
 ##
 q0 | = | q25
-estado final: q3 q8 q16 q21 q22 q23 q24 q25
+##
+q22 | . | q26
+q23 | . | q26
+q24 | . | q26
+q0  | . | q26
+##
+
+estado final: q3 q8 q16 q21 q22 q23 q24 q25 q26
 q3 classe int
 q8 classe float
-q16 classe incioDePrograma
-q21 classe finalDePrograma
-q22 classe variavel
-q23 classe numeroInteiro
-q24 classe numeroFloat
-q25 classe atribuicao
+q16 classe ini
+q21 classe fim
+q22 classe id
+q23 classe n
+q24 classe f
+q25 classe att
+q26 classe endl
 
