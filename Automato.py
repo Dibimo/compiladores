@@ -7,6 +7,7 @@ class Automato:
         self.acoesOriginal = {}
         self.classes = {}
         self.classes_simbolos = ''
+        self.tabela_simbolos = {}
 
         with open(nomeAutomato) as file:
             lines = file.readlines()
@@ -40,6 +41,7 @@ class Automato:
         self.classes_simbolos = ''
         entrada_array = entrada.split(' ')
         estado_atual = self.estado_inicial
+
         for simbolo in entrada_array:
             estado_atual = self.estado_inicial
             self.classes_simbolos += ' '
@@ -53,8 +55,18 @@ class Automato:
                     if(e in '.'):
                         self.classes_simbolos += ' '
                     self.adiciona_lexima(estado_atual)
+        tupla = self.retorna_tupla_simbolo()
+        return tupla
 
-        return self.retorna_leximas()
+    def retorna_tupla_simbolo(self):
+        if('int' in self.classes_simbolos or 'float' in self.classes_simbolos):
+            id_v = self.classes_simbolos.split(' ')[1]
+            tipo = self.classes_simbolos.split(' ')[0]
+            valor_inicial = self.classes_simbolos.split(' ')[4]
+            return (id_v, tipo, valor_inicial)
+
+        if('ini' in self.classes_simbolos or 'fim' in self.classes_simbolos):
+            return (self.classes_simbolos)
 
     def adiciona_lexima(self, estado):
         if (not self.classes[estado] in self.classes_simbolos):
@@ -63,5 +75,3 @@ class Automato:
     def retorna_leximas(self):
         return self.classes_simbolos
 
-    def retorna_tupla(self):
-        return (self.tipo, self.valor, self.id)

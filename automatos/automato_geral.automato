@@ -48,8 +48,8 @@ q8 classe float
 q16 classe ini
 q21 classe fim
 q22 classe id
-q23 classe n
-q24 classe f
+q23 classe num
+q24 classe r
 q25 classe att
 q26 classe endl
 
