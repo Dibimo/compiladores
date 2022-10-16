@@ -12,7 +12,7 @@ def retorna_dicionario(chave):
         valor = []
         chaves_atuais = dicionario.keys()
         for c in chaves_atuais:
-            if(not c in chave):
+            if(not chave in c):
                 valor += dicionario[c]
 
         dicionario[chave] = valor

@@ -1,6 +1,1 @@
 INT a = 10.
-FLOAT b = 11,4.
-INT c = 0.
-COMECO
-    a = b.
-FINAL

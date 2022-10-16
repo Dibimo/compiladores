@@ -1,0 +1,9 @@
+{
+    "hehe": {
+        "prefix": "hehe",
+        "body": [
+            "token, valor = self.token_atual"
+        ],
+        "description": "hehe"
+    }
+}
