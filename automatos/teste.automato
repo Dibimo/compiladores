@@ -1,0 +1,12 @@
+estado inicial: q0
+estado final: q31 q30
+retrocede: q30 q31
+q30 classe num
+q31 classe numr
+
+q0   |  [0-9]  | q23
+q23  | *[0-9]  | q30
+q23  |  [0-9]  | q23
+q23  |    ,    | q24
+q24  | *[0-9]  | q31
+q24  |  [0-9]  | q24

@@ -24,10 +24,15 @@ class Automato:
                 self.estado_final = l.split(':')[1].strip().split(' ')
                 continue
 
+            if('retrocede' in l):
+                teste = l.replace('retrocede: ', '')
+                self.estados_retrocede = teste.split(' ')
+                continue
+
             if ('classe' in l):
                 estado = l.split(' ')[0]
                 classe = l.split(' ')[2]
-                self.classes[estado] = classe
+                self.classes[estado] = classe.replace(' ', '')
                 continue
 
             estado = l.split('|')[0].strip()
@@ -37,26 +42,41 @@ class Automato:
                 self.estados[estado + t] = destino
 
 
-    def analizar_entrada(self, entrada):
+    def analizar_entrada(self, entrada : str):
         self.classes_simbolos = ''
-        entrada_array = entrada.split(' ')
         estado_atual = self.estado_inicial
+        lexemas = []
+        lexema = ''
+        i = 0
+        houve_troca_estado = False
+        while(i < len(entrada)):
+            e = entrada[i]
+            if(not (estado_atual + e) in self.estados or estado_atual == 'qm'):
+                return (False, e)
 
-        for simbolo in entrada_array:
-            estado_atual = self.estado_inicial
-            self.classes_simbolos += ' '
-            for e in simbolo:
-                if(not estado_atual + e in self.estados or estado_atual == 'qm'):
-                    return (False, e)
+            proximo_estado = self.estados[estado_atual + e]
 
-                estado_atual = self.estados[estado_atual + e]
+            if(houve_troca_estado and lexema != ''):
+                lexemas.append(lexema)
+                lexema = ''
 
-                if(estado_atual in self.estado_final):
-                    if(e in '.'):
-                        self.classes_simbolos += ' '
-                    self.adiciona_lexima(estado_atual)
-        tupla = self.retorna_tupla_simbolo()
-        return tupla
+            houve_troca_estado = estado_atual != proximo_estado
+            estado_atual = proximo_estado
+            i += 1
+            if(estado_atual in self.estado_final and houve_troca_estado):
+                lexema = self.classes[estado_atual]
+
+            if(estado_atual in self.estados_retrocede):
+                i -= 1
+                estado_atual = self.estado_inicial
+
+
+        if(lexema != ''): # salvando o último lexema, se for o caso
+            lexemas.append(lexema)
+
+        if (not estado_atual in self.estado_final):
+            return 'erro'
+        return lexemas
 
     def retorna_tupla_simbolo(self):
         if('int' in self.classes_simbolos or 'float' in self.classes_simbolos):
@@ -68,10 +88,10 @@ class Automato:
         if('ini' in self.classes_simbolos or 'fim' in self.classes_simbolos):
             return (self.classes_simbolos)
 
-    def adiciona_lexima(self, estado):
+    def adiciona_lexema(self, estado):
         if (not self.classes[estado] in self.classes_simbolos):
             self.classes_simbolos += self.classes[estado]
 
-    def retorna_leximas(self):
+    def retorna_lexemas(self):
         return self.classes_simbolos
 
