@@ -25,6 +25,9 @@ q20 | L | q21
 q0  | [a-z] | q22
 q22 | [a-z] | q22
 q22 | [0-9] | q22
+q22 | . | q40
+q22 | espaco | q40
+q22 | = | q40
 q22 | _ | q22
 q22 | - | q22
 ##
@@ -39,7 +42,6 @@ q0  |   =   | q25
 q22 |   =   | q25
 q25 | [0-9] | q23
 ##
-q22 | . | q26
 q0  | . | q26
 ##
 q0  | espaco | q0
@@ -47,20 +49,19 @@ q8  | espaco | q0
 q3  | espaco | q0
 q16 | espaco | q0
 q21 | espaco | q0
-q22 | espaco | q0
 q23 | espaco | q0
 q24 | espaco | q0
 q25 | espaco | q0
 q26 | espaco | q0
 ##
 
-estado final: q3 q8 q16 q21 q22 q27 q28 q25 q26
-retrocede: q27 q28
+estado final: q3 q8 q16 q21 q27 q28 q25 q26 q40
+retrocede: q27 q28 q40
 q3 classe int
 q8 classe float
 q16 classe ini
 q21 classe fim
-q22 classe id
+q40 classe id
 q27 classe num
 q28 classe numr
 q25 classe =
