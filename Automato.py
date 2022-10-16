@@ -70,11 +70,12 @@ class Automato:
                 estado_atual = self.estado_inicial
 
             if(estado_atual == self.estado_inicial):
-                if('..' in pilha):
-                    pilha = '.'
-                lexemas.append((lexema, pilha))
-                lexema = ''
-                pilha = ''
+                if('..' in pilha or '==' in pilha):
+                    pilha = pilha[:-1]
+                if(lexema != '' and pilha != ''):
+                    lexemas.append((lexema, pilha))
+                    lexema = ''
+                    pilha = ''
 
             if(e != " "):
                 pilha += e
@@ -83,7 +84,8 @@ class Automato:
         if(lexema != ''): # salvando o último lexema, se for o caso
             if('..' in pilha):
                 pilha = '.'
-            lexemas.append((lexema, pilha))
+            if(lexema != '' and pilha != ''):
+                lexemas.append((lexema, pilha))
 
         if (not estado_atual in self.estado_final):
             return 'erro'
