@@ -49,16 +49,14 @@ class Automato:
         lexema = ''
         i = 0
         houve_troca_estado = False
+        pilha = ''
         while(i < len(entrada)):
             e = entrada[i]
+
             if(not (estado_atual + e) in self.estados or estado_atual == 'qm'):
                 return (False, e)
 
             proximo_estado = self.estados[estado_atual + e]
-
-            if(houve_troca_estado and lexema != ''):
-                lexemas.append(lexema)
-                lexema = ''
 
             houve_troca_estado = estado_atual != proximo_estado
             estado_atual = proximo_estado
@@ -66,13 +64,26 @@ class Automato:
             if(estado_atual in self.estado_final and houve_troca_estado):
                 lexema = self.classes[estado_atual]
 
+
             if(estado_atual in self.estados_retrocede):
                 i -= 1
                 estado_atual = self.estado_inicial
 
+            if(estado_atual == self.estado_inicial):
+                if('..' in pilha):
+                    pilha = '.'
+                lexemas.append((lexema, pilha))
+                lexema = ''
+                pilha = ''
+
+            if(e != " "):
+                pilha += e
+
 
         if(lexema != ''): # salvando o último lexema, se for o caso
-            lexemas.append(lexema)
+            if('..' in pilha):
+                pilha = '.'
+            lexemas.append((lexema, pilha))
 
         if (not estado_atual in self.estado_final):
             return 'erro'

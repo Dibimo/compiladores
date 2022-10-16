@@ -1,8 +1,6 @@
-int a = 10.
-float b = 11,4.
-int c = 0.
-comeco
-    ler(c).
-    escrever(c).
-    a = b + c.
-final
+INT a = 10.
+FLOAT b = 11,4.
+INT c = 0.
+COMECO
+    a = b.
+FINAL
