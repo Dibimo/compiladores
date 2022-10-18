@@ -1,1 +1,4 @@
-INT a = 10.
+INT a = 978.
+COMECO
+    ESCREVER a.
+FINAL

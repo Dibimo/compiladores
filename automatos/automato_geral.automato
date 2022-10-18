@@ -22,6 +22,15 @@ q18 | N | q19
 q19 | A | q20
 q20 | L | q21
 ##
+q0  | E | q50
+q50 | S | q51
+q51 | C | q52
+q52 | R | q53
+q53 | E | q54
+q54 | V | q55
+q55 | E | q56
+q56 | R | q58
+##
 q0  | [a-z] | q22
 q22 | [a-z] | q22
 q22 | [0-9] | q22
@@ -53,9 +62,10 @@ q23 | espaco | q0
 q24 | espaco | q0
 q25 | espaco | q0
 q26 | espaco | q0
+q58 | espaco | q0
 ##
 
-estado final: q3 q8 q16 q21 q27 q28 q25 q26 q40
+estado final: q3 q8 q16 q21 q27 q28 q25 q26 q40 q58
 retrocede: q27 q28 q40
 q3 classe int
 q8 classe float
@@ -66,4 +76,4 @@ q27 classe num
 q28 classe numr
 q25 classe =
 q26 classe endl
-
+q58 classe esc
