@@ -1,5 +1,5 @@
 estado inicial: q0
-estado final: q3 q8 q15 q19 q27 q30 q31 q33 q35 q37 q38
+estado final: q3 q8 q15 q19 q27 q30 q31 q33 q35 q37 q38 q39 q40
 retrocede: q33 q35 q37
 q3 classe int
 q8 classe float
@@ -92,5 +92,7 @@ q33 | espaco | q0
 q35 | espaco | q0
 q37 | espaco | q0
 q38 | espaco | q0
+q39 | espaco | q0
+q40 | espaco | q0
 
 

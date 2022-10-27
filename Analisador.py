@@ -21,76 +21,59 @@ class Analisador:
         while(self.linha_ponteiro < self.quantidade_linhas and not self.erro):
             self.proxima_linha()
             self.proximo_token()
-            self.regra_1()
+            self.regra_comeco()
 
-    def regra_1(self):
+    def regra_comeco(self):
         token, valor = self.token_atual
-        if(token == 'int' or token == 'float'):
+        if(token == 'int' or token == 'float'): # se for  declaração de variavel1
             self.tipo = valor
             self.proximo_token()
-            self.regra_2()
+            self.r_declaracao_id()
             return
         if(token == 'ini'):
-            self.regra_6()
+            print(self.tabela_simbolos)
+            return
         else:
             self.erro = True
             print('Erro')
 
-    def regra_2(self):
+    def r_declaracao_id(self):
         token, valor = self.token_atual
         if(token == 'id'):
             self.tabela_simbolos[valor] = {}
             self.tabela_simbolos[valor]['tipo'] = self.tipo
             self.id = valor
             self.proximo_token()
-            self.regra_3()
+            self.r_declaracao_att()
         else:
-            print(f'Esperado identificador de variavel, recebido {token}')
+            print(f'Esperado identificador')
 
-    def regra_3(self):
+    def r_declaracao_att(self):
         token, valor = self.token_atual
         if(token == '='):
             self.proximo_token()
-            self.regra_4()
+            self.r_declaracao_valor()
+        else:
+            print('Esperado símbolo de atribuição')
 
-    def regra_4(self):
-        token, valor = self.token_atual
-        if(token == 'num' or token == 'numr'):
-            if(self.tabela_simbolos[self.id]['tipo'] == 'INT' and ',' in valor):
-                print('Não é póssivel passar um valor real para uma váriavel inteira')
-                return
-            self.tabela_simbolos[self.id]['valor'] =  valor
-            self.proximo_token()
-            self.regra_5()
+    def r_declaracao_valor(self):
+            token, valor = self.token_atual
+            if(token == 'num' or token == 'numr'):
+                if(self.tabela_simbolos[self.id]['tipo'] == 'INT' and ',' in valor):
+                    print('Não é póssivel passar um valor real para uma váriavel inteira')
+                    return
+                self.tabela_simbolos[self.id]['valor'] =  valor
+                self.proximo_token()
+                self.r_endl()
+            else:
+                print('Esperado valor numerico')
 
-    def regra_5(self):
+    def r_endl(self):
         token, valor = self.token_atual
-        if(token == 'endl'):
+        if(token == '.'):
             return
         else:
             print('Esperado ponto final')
-
-
-    def regra_6(self):
-        token, valor = self.token_atual
-        if(token == 'ini'):
-            self.proximo_token()
-            self.regra_7()
-        else:
-            print('Esperado começo de programa')
-
-    def regra_7(self):
-        token, valor = self.token_atual
-        if(token == 'esc'):
-            self.proximo_token()
-            self.regra_8()
-
-    def regra_8(self):
-        self.proximo_token()
-        token, valor = self.token_atual
-        if(token == 'id'):
-            print(self.tabela_simbolos[valor]['valor'])
-            exit(0)
 
 
     def proximo_token(self):

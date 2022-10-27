@@ -12,12 +12,9 @@ lexemas = []
 for l in linhas:
     lexemas.append(automato_geral.analizar_entrada(l))
 
-print(lexemas)
 
-# if('erro' in lexemas):
-#     print('ERRO de sintaxe')
-# else:
-#     asd = Analisador(lexemas)
-#     asd.iniciar()
-# print(automato_geral.analizar_entrada('teste.'))
-
+if('erro' in lexemas):
+    print('ERRO de sintaxe')
+else:
+    asd = Analisador(lexemas)
+    asd.iniciar()
