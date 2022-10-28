@@ -16,6 +16,8 @@ class Analisador:
       self.tabela_simbolos = {}
       self.erro = False
 
+      self.temComeco = False
+
 
     def iniciar(self):
         while(self.linha_ponteiro < self.quantidade_linhas and not self.erro):
@@ -30,12 +32,71 @@ class Analisador:
             self.proximo_token()
             self.r_declaracao_id()
             return
-        if(token == 'ini'):
-            print(self.tabela_simbolos)
-            return
+        if(not self.temComeco):
+            self.temComeco = token == 'ini'
+
+        if(self.temComeco):
+            self.r_comeco()
+
+        # else:
+        #     # self.erro = True
+        #     print('Erro')
+
+
+    def r_comeco(self):
+        token, valor = self.token_atual
+        # self.proximo_token()
+        self.r_programa()
+        # else:
+        #     print('Esperado inicio de programa')
+
+
+    def r_programa(self):
+        token, valor = self.token_atual
+        if(token == 'esc'):
+            self.proximo_token()
+            self.r_escrever()
+
+        if(token == 'ler'):
+            self.proximo_token()
+            self.r_ler()
+
+        if(token == 'id'):
+            pass
+
+
+    def r_escrever(self):
+        token, valor = self.token_atual
+        if(token == 'id'):
+            if(valor in self.tabela_simbolos.keys()):
+                self.proximo_token()
+                if(self.r_endl()):
+                    print(self.tabela_simbolos[valor]['valor'])
+                else:
+                    print('Esperado final de linha')
+            else:
+                print('Variavel não declarada')
         else:
-            self.erro = True
-            print('Erro')
+            print('Esperado identificador')
+
+
+    def r_ler(self):
+        token, valor = self.token_atual
+        if(token == 'id'):
+            if(valor in self.tabela_simbolos.keys()):
+                self.proximo_token()
+                if(self.r_endl()):
+                    temp = input()
+                    if(type(temp) == 'float' and self.tabela_simbolos[valor]['tipo'] == 'int'):
+                        print('Tipos não compativeis')
+                        exit(0)
+                    self.tabela_simbolos[valor]['valor'] = temp
+                else:
+                    print('Esperado final de linha')
+            else:
+                print('Variavel não declarada')
+        else:
+            print('Esperado identificador')
 
     def r_declaracao_id(self):
         token, valor = self.token_atual
@@ -71,7 +132,7 @@ class Analisador:
     def r_endl(self):
         token, valor = self.token_atual
         if(token == '.'):
-            return
+            return True
         else:
             print('Esperado ponto final')
 

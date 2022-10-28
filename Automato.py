@@ -54,7 +54,7 @@ class Automato:
             e = entrada[i]
 
             if(not (estado_atual + e) in self.estados or estado_atual == 'qm'):
-                return (False, e)
+                return 'erro'
 
             proximo_estado = self.estados[estado_atual + e]
 

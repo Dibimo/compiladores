@@ -1,8 +1,7 @@
-INT a = 978.
-FLOAT teste = 34,3.
+INT a = 1123.
+INT teste = 123.
 COMECO
     ESCREVER a.
     LER teste.
-    b = a + c.
-    c = b - a.
+    ESCREVER teste.
 FINAL
