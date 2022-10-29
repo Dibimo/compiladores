@@ -77,15 +77,6 @@ class Analisador:
 
     def r_reatribuicao(self):
         token, valor = self.token_atual
-        # if(token == 'id'):
-        #     self.verifica_variavel(valor)
-        #     self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.tabela_simbolos[valor]['valor']
-
-        # if(token == 'num' or token == 'numr'):
-        #     self.verifica_tipagem(self.variavel_reatribuicao, valor)
-        #     self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = valor
-
-        # self.proximo_token()
         if(not self.r_endl()):
             if(token == 'id' or token == 'num' or token == 'numr'):
                 if(token == 'num' or token == 'numr'):
@@ -108,14 +99,24 @@ class Analisador:
 
     def operacao(self):
         token, valor = self.token_atual
-        self.proximo_token()
         if(token == '+'):
+            self.proximo_token()
             self.somar()
-        elif(token == '-'):
-            self.subtrair()
-        else:
-            print('Esperado operador')
 
+        if(token == '-'):
+            self.proximo_token()
+            self.subtratir()
+
+        if(token == 'id'):
+            self.verifica_variavel(valor)
+            self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.tabela_simbolos[valor]['valor']
+
+        if(token == 'num' or token == 'numr'):
+            self.verifica_tipagem(self.variavel_reatribuicao, valor)
+            self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = valor
+
+        if(token == '.'):
+            self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.variavel_temp_a
 
     def somar(self):
         token, valor = self.token_atual
@@ -136,7 +137,7 @@ class Analisador:
             if(token == 'id'):
                 self.verifica_variavel(valor)
                 self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
-        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.variavel_temp_a - self.variavel_temp_b
+        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = int(self.variavel_temp_a) - int(self.variavel_temp_b)
 
     def verifica_tipagem(self, variavel, numero):
         if(self.tabela_simbolos[variavel]['tipo'] == 'INT' and ',' in numero):

@@ -1,6 +1,6 @@
 INT a = 5.
-INT teste = 5.
+INT teste = 2.
 COMECO
-    a = teste + a.
+    a = teste.
     ESCREVER a.
 FINAL
