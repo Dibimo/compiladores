@@ -49,18 +49,8 @@ class Analisador:
             self.temFinal = token == 'fim'
 
 
-        # else:
-        #     # self.erro = True
-        #     print('Erro')
-
-
     def r_comeco(self):
-        token, valor = self.token_atual
-        # self.proximo_token()
         self.r_programa()
-        # else:
-        #     print('Esperado inicio de programa')
-
 
     def r_programa(self):
         token, valor = self.token_atual
