@@ -18,6 +18,8 @@ class Analisador:
 
       self.temComeco = False
 
+      self.variavel_reatribuicao = ''
+
 
     def iniciar(self):
         while(self.linha_ponteiro < self.quantidade_linhas and not self.erro):
@@ -62,39 +64,117 @@ class Analisador:
             self.r_ler()
 
         if(token == 'id'):
-            pass
+            self.variavel_reatribuicao = valor
+            self.proximo_token()
+            self.r_variavel()
 
+
+    def r_variavel(self):
+        token, valor = self.token_atual
+        if(token == '='):
+            self.proximo_token()
+            self.r_reatribuicao()
+
+    def r_reatribuicao(self):
+        token, valor = self.token_atual
+        # if(token == 'id'):
+        #     self.verifica_variavel(valor)
+        #     self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.tabela_simbolos[valor]['valor']
+
+        # if(token == 'num' or token == 'numr'):
+        #     self.verifica_tipagem(self.variavel_reatribuicao, valor)
+        #     self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = valor
+
+        # self.proximo_token()
+        if(not self.r_endl()):
+            if(token == 'id' or token == 'num' or token == 'numr'):
+                if(token == 'num' or token == 'numr'):
+                    self.variavel_temp_a = valor
+                if(token == 'id'):
+                    self.verifica_variavel(valor)
+                    self.variavel_temp_a = self.tabela_simbolos[valor]['valor']
+                self.proximo_token()
+                self.operacao()
+
+
+        # self.proximo_token()
+        # if(not self.r_endl()):
+        #     self.sair('Esperado finalizacao de linha')
+
+
+    def sair(self, mensagem):
+        print(mensagem)
+        exit(0)
+
+    def operacao(self):
+        token, valor = self.token_atual
+        self.proximo_token()
+        if(token == '+'):
+            self.somar()
+        elif(token == '-'):
+            self.subtrair()
+        else:
+            print('Esperado operador')
+
+
+    def somar(self):
+        token, valor = self.token_atual
+        if(token == 'id' or token == 'num' or token == 'numr'):
+            if(token == 'num' or token == 'numr'):
+                self.variavel_temp_b = valor
+            if(token == 'id'):
+                self.verifica_variavel(valor)
+                self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
+        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = int(self.variavel_temp_a) + int(self.variavel_temp_b)
+
+
+    def subtratir(self):
+        token, valor = self.token_atual
+        if(token == 'id' or token == 'num' or token == 'numr'):
+            if(token == 'num' or token == 'numr'):
+                self.variavel_temp_b = valor
+            if(token == 'id'):
+                self.verifica_variavel(valor)
+                self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
+        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.variavel_temp_a - self.variavel_temp_b
+
+    def verifica_tipagem(self, variavel, numero):
+        if(self.tabela_simbolos[variavel]['tipo'] == 'INT' and ',' in numero):
+            print('Não é póssivel passar um valor real para uma váriavel inteira')
+            exit(0)
 
     def r_escrever(self):
         token, valor = self.token_atual
         if(token == 'id'):
-            if(valor in self.tabela_simbolos.keys()):
-                self.proximo_token()
-                if(self.r_endl()):
-                    print(self.tabela_simbolos[valor]['valor'])
-                else:
-                    print('Esperado final de linha')
+            self.verifica_variavel(valor)
+            self.proximo_token()
+            if(self.r_endl()):
+                print(self.tabela_simbolos[valor]['valor'])
             else:
-                print('Variavel não declarada')
+                print('Esperado final de linha')
         else:
             print('Esperado identificador')
+
+
+    def verifica_variavel(self, variavel):
+        if(not variavel in self.tabela_simbolos.keys()):
+            print('Variável não declarada!')
+            exit(0)
 
 
     def r_ler(self):
         token, valor = self.token_atual
         if(token == 'id'):
-            if(valor in self.tabela_simbolos.keys()):
-                self.proximo_token()
-                if(self.r_endl()):
-                    temp = input()
-                    if(type(temp) == 'float' and self.tabela_simbolos[valor]['tipo'] == 'int'):
-                        print('Tipos não compativeis')
-                        exit(0)
-                    self.tabela_simbolos[valor]['valor'] = temp
-                else:
-                    print('Esperado final de linha')
+            self.verifica_variavel(valor)
+            self.proximo_token()
+            if(self.r_endl()):
+                temp = input()
+                if(type(temp) == 'float' and self.tabela_simbolos[valor]['tipo'] == 'int'):
+                    print('Tipos não compativeis')
+                    exit(0)
+                self.tabela_simbolos[valor]['valor'] = temp
             else:
-                print('Variavel não declarada')
+                print('Esperado final de linha')
         else:
             print('Esperado identificador')
 
@@ -134,7 +214,7 @@ class Analisador:
         if(token == '.'):
             return True
         else:
-            print('Esperado ponto final')
+            return False
 
 
     def proximo_token(self):

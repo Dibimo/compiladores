@@ -1,7 +1,6 @@
-INT a = 1123.
-INT teste = 123.
+INT a = 5.
+INT teste = 5.
 COMECO
+    a = teste + a.
     ESCREVER a.
-    LER teste.
-    ESCREVER teste.
 FINAL
