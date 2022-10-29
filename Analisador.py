@@ -17,6 +17,7 @@ class Analisador:
       self.erro = False
 
       self.temComeco = False
+      self.temFinal = False
 
       self.variavel_reatribuicao = ''
 
@@ -26,6 +27,10 @@ class Analisador:
             self.proxima_linha()
             self.proximo_token()
             self.regra_comeco()
+        if(not self.temFinal):
+            print('Esperado FINAL')
+        else:
+            print('Compilado com sucesso!')
 
     def regra_comeco(self):
         token, valor = self.token_atual
@@ -39,6 +44,10 @@ class Analisador:
 
         if(self.temComeco):
             self.r_comeco()
+
+        if(not self.temFinal):
+            self.temFinal = token == 'fim'
+
 
         # else:
         #     # self.erro = True
