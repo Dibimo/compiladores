@@ -86,12 +86,6 @@ class Analisador:
                 self.proximo_token()
                 self.operacao()
 
-
-        # self.proximo_token()
-        # if(not self.r_endl()):
-        #     self.sair('Esperado finalizacao de linha')
-
-
     def sair(self, mensagem):
         print(mensagem)
         exit(0)
