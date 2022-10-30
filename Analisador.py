@@ -82,7 +82,7 @@ class Analisador:
                     self.variavel_temp_a = valor
                 if(token == 'id'):
                     self.verifica_variavel(valor)
-                    self.variavel_temp_a = self.tabela_simbolos[valor]['valor']
+                    self.variavel_temp_a = self.get_variavel_valor(valor)
                 self.proximo_token()
                 self.operacao()
 
@@ -210,6 +210,12 @@ class Analisador:
         else:
             return False
 
+
+    def get_variavel_valor(self, variavel):
+        return self.tabela_simbolos[variavel]['valor']
+
+    def get_variavel_tipo(self, variavel):
+        return self.tabela_simbolos[variavel]['tipo']
 
     def proximo_token(self):
         if(self.token_ponteiro < self.tamanho_linha):
