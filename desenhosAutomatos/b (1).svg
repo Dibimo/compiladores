@@ -101,7 +101,7 @@
 	<polygon fill="black" stroke-width="1" points="342.5,295.5 347.5,287.5 337.5,287.5"/>
 	<text x="322.5" y="262.5" font-family="Times New Roman" font-size="20">R</text>
 	<path stroke="black" stroke-width="1" fill="none" d="M 669.725,338.297 A 22.5,22.5 0 1 1 643.275,338.297"/>
-	<text x="536.5" y="400.5" font-family="Times New Roman" font-size="20">[a-z],[0-9],.,espaco,=,_,-</text>
+	<text x="536.5" y="400.5" font-family="Times New Roman" font-size="20">[a-z] | [0-9] | . | espaco | = | _ | - </text>
 	<polygon fill="black" stroke-width="1" points="643.275,338.297 634.527,341.83 642.618,347.708"/>
 	<polygon stroke="black" stroke-width="1" points="93.5,454.5 152.5,454.5"/>
 	<polygon fill="black" stroke-width="1" points="152.5,454.5 144.5,449.5 144.5,459.5"/>
