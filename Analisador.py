@@ -14,6 +14,8 @@ class Analisador:
       self.token_ponteiro = 0
 
       self.tabela_simbolos = {}
+      self.tabela_simbolos['erro'] = {}
+      self.tabela_simbolos['erro']['valor'] = 'erro'
       self.erro = False
 
       self.temComeco = False
@@ -42,8 +44,7 @@ class Analisador:
         if(not self.temComeco):
             self.temComeco = token == 'ini'
 
-        if(self.temComeco):
-            self.r_comeco()
+        self.r_comeco()
 
         if(not self.temFinal):
             self.temFinal = token == 'fim'
@@ -53,6 +54,9 @@ class Analisador:
         self.r_programa()
 
     def r_programa(self):
+        if(not self.temComeco):
+            print('Esperado íncio de bloco')
+            exit(0)
         token, valor = self.token_atual
         if(token == 'esc'):
             self.proximo_token()
@@ -95,21 +99,15 @@ class Analisador:
         if(token == '+'):
             self.proximo_token()
             self.somar()
+            return
 
         if(token == '-'):
             self.proximo_token()
             self.subtratir()
+            return
 
-        if(token == 'id'):
-            self.verifica_variavel(valor)
-            self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.tabela_simbolos[valor]['valor']
-
-        if(token == 'num' or token == 'numr'):
-            self.verifica_tipagem(self.variavel_reatribuicao, valor)
-            self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = valor
-
-        if(token == '.'):
-            self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.variavel_temp_a
+        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.variavel_temp_a
+        self.r_endl(True)
 
     def somar(self):
         token, valor = self.token_atual
@@ -151,6 +149,8 @@ class Analisador:
 
 
     def verifica_variavel(self, variavel):
+        if(variavel == 'erro'):
+            return
         if(not variavel in self.tabela_simbolos.keys()):
             print('Variável não declarada!')
             exit(0)
@@ -203,11 +203,14 @@ class Analisador:
             else:
                 print('Esperado valor numerico')
 
-    def r_endl(self):
+    def r_endl(self, parar = False):
         token, valor = self.token_atual
         if(token == '.'):
             return True
         else:
+            if(parar):
+                print('esperado final de linha')
+                exit(0)
             return False
 
 
