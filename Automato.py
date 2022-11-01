@@ -54,7 +54,7 @@ class Automato:
             e = entrada[i]
 
             if(not (estado_atual + e) in self.estados or estado_atual == 'qm'):
-                return 'erro'
+                lexemas.append(('id', 'erro'))
 
             proximo_estado = self.estados[estado_atual + e]
 
@@ -88,7 +88,7 @@ class Automato:
                 lexemas.append((lexema, pilha))
 
         if (not estado_atual in self.estado_final):
-            return 'erro'
+            lexemas.append(('id', 'erro'))
         return lexemas
 
     def retorna_tupla_simbolo(self):

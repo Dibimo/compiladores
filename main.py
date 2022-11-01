@@ -1,3 +1,4 @@
+import sys
 from Analisador import Analisador
 from Automato import Automato
 from utilitarios import retorna_linhas_arquivo
@@ -12,6 +13,8 @@ lexemas = []
 for l in linhas:
     lexemas.append(automato_geral.analizar_entrada(l))
 
+if('-lexemas' in sys.argv):
+    print(lexemas)
 
 asd = Analisador(lexemas)
 asd.iniciar()
