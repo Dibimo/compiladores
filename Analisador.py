@@ -117,7 +117,17 @@ class Analisador:
             if(token == 'id'):
                 self.verifica_variavel(valor)
                 self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
-        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = int(self.variavel_temp_a) + int(self.variavel_temp_b)
+
+        if(',' in self.variavel_temp_a):
+            temp_a = float(self.variavel_temp_a.replace(',','.'))
+        else:
+            temp_a = int(self.variavel_temp_a.replace(',','.'))
+
+        if(',' in self.variavel_temp_b):
+            temp_b = float(self.variavel_temp_b.replace(',','.'))
+        else:
+            temp_b = int(self.variavel_temp_b.replace(',','.'))
+        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = temp_a + temp_b
 
 
     def subtratir(self):
@@ -128,11 +138,21 @@ class Analisador:
             if(token == 'id'):
                 self.verifica_variavel(valor)
                 self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
-        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = int(self.variavel_temp_a) - int(self.variavel_temp_b)
+
+        if(',' in self.variavel_temp_a):
+            temp_a = float(self.variavel_temp_a.replace(',','.'))
+        else:
+            temp_a = int(self.variavel_temp_a.replace(',','.'))
+
+        if(',' in self.variavel_temp_b):
+            temp_b = float(self.variavel_temp_b.replace(',','.'))
+        else:
+            temp_b = int(self.variavel_temp_b.replace(',','.'))
+        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = temp_a - temp_b
 
     def verifica_tipagem(self, variavel, numero):
         if(self.tabela_simbolos[variavel]['tipo'] == 'INT' and ',' in numero):
-            print('Não é póssivel passar um valor real para uma váriavel inteira')
+            print('Não é póssivel passar um valor real para uma variavel inteira')
             exit(0)
 
     def r_escrever(self):
@@ -195,7 +215,8 @@ class Analisador:
             token, valor = self.token_atual
             if(token == 'num' or token == 'numr'):
                 if(self.tabela_simbolos[self.id]['tipo'] == 'INT' and ',' in valor):
-                    print('Não é póssivel passar um valor real para uma váriavel inteira')
+                    print('Não é póssivel passar um valor real para uma variavel inteira')
+                    exit(0)
                     return
                 self.tabela_simbolos[self.id]['valor'] =  valor
                 self.proximo_token()
