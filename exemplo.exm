@@ -3,5 +3,5 @@ COMECO
     INT b.
     LER b.
     a = a + b + c - 10.
-    ESCREVER a + 10.
+    ESCREVER a.
 FINAL
