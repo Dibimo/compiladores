@@ -42,6 +42,11 @@ class Automato:
                 self.estados[estado + t] = destino
 
 
+    def check_int(s):
+        if s[0] in ('-', '+'):
+            return s[1:].isdigit()
+        return s.isdigit()
+
     def analizar_entrada(self, entrada : str):
         self.classes_simbolos = ''
         estado_atual = self.estado_inicial
@@ -52,7 +57,6 @@ class Automato:
         pilha = ''
         while(i < len(entrada)):
             e = entrada[i]
-
             if(not (estado_atual + e) in self.estados or estado_atual == 'qm'):
                 lexemas.append(('id', pilha))
 
@@ -61,8 +65,10 @@ class Automato:
             houve_troca_estado = estado_atual != proximo_estado
             estado_atual = proximo_estado
             i += 1
+
             if(estado_atual in self.estado_final and houve_troca_estado):
                 lexema = self.classes[estado_atual]
+
 
 
             if(estado_atual in self.estados_retrocede):
@@ -90,21 +96,3 @@ class Automato:
         if (not estado_atual in self.estado_final):
             lexemas.append(('id', pilha))
         return lexemas
-
-    def retorna_tupla_simbolo(self):
-        if('int' in self.classes_simbolos or 'float' in self.classes_simbolos):
-            id_v = self.classes_simbolos.split(' ')[1]
-            tipo = self.classes_simbolos.split(' ')[0]
-            valor_inicial = self.classes_simbolos.split(' ')[4]
-            return (id_v, tipo, valor_inicial)
-
-        if('ini' in self.classes_simbolos or 'fim' in self.classes_simbolos):
-            return (self.classes_simbolos)
-
-    def adiciona_lexema(self, estado):
-        if (not self.classes[estado] in self.classes_simbolos):
-            self.classes_simbolos += self.classes[estado]
-
-    def retorna_lexemas(self):
-        return self.classes_simbolos
-

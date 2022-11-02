@@ -1,6 +1,7 @@
 INT a = 5.
-INT teste = 2.
+FLOAT teste = 2,1.
 COMECO
-    a = teste - 10.
-    ESCREVER a.
+    a = 2.
+    ESCREVER a + 2.
+    LER a.
 FINAL

@@ -3,251 +3,135 @@ from asyncio.windows_events import NULL
 
 class Analisador:
     def __init__(self, entrada : list):
-      self.codigo = entrada
-      self.linha_atual = NULL
-      self.token_atual = NULL
+        self.aux = {
+            '+': 'mais',
+            '-': 'menos',
+            '=': 'att',
+            '.': 'endl'
+        }
+        self.codigo = entrada
+        self.linha_atual = NULL
+        self.token_atual = NULL
 
-      self.quantidade_linhas = len(entrada)
-      self.tamanho_linha = NULL
+        self.quantidade_linhas = len(entrada)
+        self.tamanho_linha = NULL
 
-      self.linha_ponteiro = 0
-      self.token_ponteiro = 0
+        self.linha_ponteiro = 0
+        self.token_ponteiro = 0
 
-      self.tabela_simbolos = {}
-      self.tabela_simbolos['erro'] = {}
-      self.tabela_simbolos['erro']['valor'] = 'erro'
-      self.erro = False
+        self.tabela_simbolos = {}
+        self.erro = False
 
-      self.temComeco = False
-      self.temFinal = False
+        self.temComeco = False
+        self.temFinal = False
 
-      self.variavel_reatribuicao = ''
+        self.variavel_reatribuicao = ''
+
 
 
     def iniciar(self):
         while(self.linha_ponteiro < self.quantidade_linhas and not self.erro):
             self.proxima_linha()
             self.proximo_token()
-            self.regra_comeco()
-        if(not self.temFinal):
-            print('Esperado FINAL')
+            self.comeco()
+
+        if(self.temComeco and self.temFinal):
+            print('Compilado com sucesso')
         else:
-            print('Compilado com sucesso!')
+            if(not self.temComeco):
+                print('Esperado ínicio de programa')
+                return
+            if(not self.temFinal):
+                print('Esperado final de programa')
 
-    def regra_comeco(self):
-        token, valor = self.token_atual
-        if(token == 'int' or token == 'float'): # se for  declaração de variavel1
-            self.tipo = valor
-            self.proximo_token()
-            self.r_declaracao_id()
-            return
-        if(not self.temComeco):
-            self.temComeco = token == 'ini'
-
-        self.r_comeco()
-
-        if(not self.temFinal):
-            self.temFinal = token == 'fim'
+    def comeco(self):
+        self.executar_func(self.get_token_classe())
 
 
-    def r_comeco(self):
-        self.r_programa()
+    def f_int(self):
+        self.executar_regra('id', 'Esperado variável')
 
-    def r_programa(self):
-        if(not self.temComeco):
-            print('Esperado íncio de bloco')
-            exit(0)
-        token, valor = self.token_atual
-        if(token == 'esc'):
-            self.proximo_token()
-            self.r_escrever()
+    def f_float(self):
+        self.executar_regra('id', 'Esperado variável')
 
-        if(token == 'ler'):
-            self.proximo_token()
-            self.r_ler()
+    def f_id(self):
+        self.executar_regra('= . + -', 'Esperado atribuição ou finalização de linha')
 
-        if(token == 'id'):
-            self.variavel_reatribuicao = valor
-            self.proximo_token()
-            self.r_variavel()
+    def f_att(self):
+        self.executar_regra('id num numr', 'Esperado esperado número ou váriavel')
 
+    def f_num(self):
+        self.executar_regra('+ - .', 'Esperado esperado operador ou finalização de linha')
 
-    def r_variavel(self):
-        token, valor = self.token_atual
-        if(token == '='):
-            self.proximo_token()
-            self.r_reatribuicao()
+    def f_numr(self):
+        self.executar_regra('+ - .', 'Esperado esperado operador ou finalização de linha')
 
-    def r_reatribuicao(self):
-        token, valor = self.token_atual
-        if(not self.r_endl()):
-            if(token == 'id' or token == 'num' or token == 'numr'):
-                if(token == 'num' or token == 'numr'):
-                    self.variavel_temp_a = valor
-                if(token == 'id'):
-                    self.verifica_variavel(valor)
-                    self.variavel_temp_a = self.get_variavel_valor(valor)
-                self.proximo_token()
-                self.operacao()
+    def f_mais(self):
+        self.executar_regra('id num numr', 'Esperado variável ou número')
 
-    def sair(self, mensagem):
-        print(mensagem)
-        exit(0)
+    def f_menos(self):
+        self.executar_regra('id num numr', 'Esperado variável ou número')
 
-    def operacao(self):
-        token, valor = self.token_atual
-        if(token == '+'):
-            self.proximo_token()
-            self.somar()
-            return
+    def f_esc(self):
+        self.executar_regra('id num numr', 'Esperado variável ou número')
 
-        if(token == '-'):
-            self.proximo_token()
-            self.subtratir()
-            return
+    def f_ler(self):
+        self.executar_regra('id', 'Esperado variável')
 
-        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = self.variavel_temp_a
-        self.r_endl(True)
+    def f_endl(self):
+        return
 
-    def somar(self):
-        token, valor = self.token_atual
-        if(token == 'id' or token == 'num' or token == 'numr'):
-            if(token == 'num' or token == 'numr'):
-                self.variavel_temp_b = valor
-            if(token == 'id'):
-                self.verifica_variavel(valor)
-                self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
+    def f_ini(self):
+        self.proximo_token()
+        self.iniciar_programa()
 
-        if(',' in self.variavel_temp_a):
-            temp_a = float(self.variavel_temp_a.replace(',','.'))
-        else:
-            temp_a = int(self.variavel_temp_a.replace(',','.'))
+    def f_fim(self):
+        self.finalizar_programa()
 
-        if(',' in self.variavel_temp_b):
-            temp_b = float(self.variavel_temp_b.replace(',','.'))
-        else:
-            temp_b = int(self.variavel_temp_b.replace(',','.'))
-        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = temp_a + temp_b
+    def iniciar_programa(self):
+        self.temComeco = True
+        return
+
+    def finalizar_programa(self):
+        self.temFinal = True
+        return
+
+    def executar_regra(self, classes_esperadas, mensagem_erro):
+        self.proximo_token()
+        self.verifica_token(classes_esperadas, mensagem_erro)
+        self.executar_func(self.get_token_classe())
+
+    def executar_func(self, nome_metodo):
+        nome_metodo = self.converte_nome_func(nome_metodo)
+        self.__getattribute__(f'f_{nome_metodo}')()
 
 
-    def subtratir(self):
-        token, valor = self.token_atual
-        if(token == 'id' or token == 'num' or token == 'numr'):
-            if(token == 'num' or token == 'numr'):
-                self.variavel_temp_b = valor
-            if(token == 'id'):
-                self.verifica_variavel(valor)
-                self.variavel_temp_b = self.tabela_simbolos[valor]['valor']
+    def converte_nome_func(self,nome_metodo):
+        if(nome_metodo in self.aux):
+            return self.aux[nome_metodo]
+        return nome_metodo
 
-        if(',' in self.variavel_temp_a):
-            temp_a = float(self.variavel_temp_a.replace(',','.'))
-        else:
-            temp_a = int(self.variavel_temp_a.replace(',','.'))
-
-        if(',' in self.variavel_temp_b):
-            temp_b = float(self.variavel_temp_b.replace(',','.'))
-        else:
-            temp_b = int(self.variavel_temp_b.replace(',','.'))
-        self.tabela_simbolos[self.variavel_reatribuicao]['valor'] = temp_a - temp_b
-
-    def verifica_tipagem(self, variavel, numero):
-        if(self.tabela_simbolos[variavel]['tipo'] == 'INT' and ',' in numero):
-            print('Não é póssivel passar um valor real para uma variavel inteira')
+    def verifica_token(self, classes_esperadas: str, mensagem_erro = 'Erro'):
+        if(not self.get_token_classe() in classes_esperadas):
+            print(mensagem_erro)
+            print(f'Linha {self.linha_ponteiro}: {self.linha_atual}')
+            print(f'{mensagem_erro}, próximo de "{self.get_token_valor()}"')
             exit(0)
 
-    def r_escrever(self):
-        token, valor = self.token_atual
-        if(token == 'id'):
-            self.verifica_variavel(valor)
-            self.proximo_token()
-            if(self.r_endl()):
-                print(self.tabela_simbolos[valor]['valor'])
-            else:
-                print('Esperado final de linha')
-        else:
-            print('Esperado identificador')
+    def get_token_classe(self):
+        return self.token_atual[0]
 
-
-    def verifica_variavel(self, variavel):
-        if(variavel == 'erro'):
-            return
-        if(not variavel in self.tabela_simbolos.keys()):
-            print('Variável não declarada!')
-            exit(0)
-
-
-    def r_ler(self):
-        token, valor = self.token_atual
-        if(token == 'id'):
-            self.verifica_variavel(valor)
-            self.proximo_token()
-            if(self.r_endl()):
-                temp = input()
-                if(type(temp) == 'float' and self.tabela_simbolos[valor]['tipo'] == 'int'):
-                    print('Tipos não compativeis')
-                    exit(0)
-                self.tabela_simbolos[valor]['valor'] = temp
-            else:
-                print('Esperado final de linha')
-        else:
-            print('Esperado identificador')
-
-    def r_declaracao_id(self):
-        token, valor = self.token_atual
-        if(token == 'id'):
-            self.tabela_simbolos[valor] = {}
-            self.tabela_simbolos[valor]['tipo'] = self.tipo
-            self.id = valor
-            self.proximo_token()
-            self.r_declaracao_att()
-        else:
-            print(f'Esperado identificador')
-
-    def r_declaracao_att(self):
-        token, valor = self.token_atual
-        if(token == '='):
-            self.proximo_token()
-            self.r_declaracao_valor()
-        else:
-            print('Esperado símbolo de atribuição')
-
-    def r_declaracao_valor(self):
-            token, valor = self.token_atual
-            if(token == 'num' or token == 'numr'):
-                if(self.tabela_simbolos[self.id]['tipo'] == 'INT' and ',' in valor):
-                    print('Não é póssivel passar um valor real para uma variavel inteira')
-                    exit(0)
-                    return
-                self.tabela_simbolos[self.id]['valor'] =  valor
-                self.proximo_token()
-                self.r_endl()
-            else:
-                print('Esperado valor numerico')
-
-    def r_endl(self, parar = False):
-        token, valor = self.token_atual
-        if(token == '.'):
-            return True
-        else:
-            if(parar):
-                print('esperado final de linha')
-                exit(0)
-            return False
-
-
-    def get_variavel_valor(self, variavel):
-        return self.tabela_simbolos[variavel]['valor']
-
-    def get_variavel_tipo(self, variavel):
-        return self.tabela_simbolos[variavel]['tipo']
+    def get_token_valor(self):
+        return self.token_atual[1]
 
     def proximo_token(self):
         if(self.token_ponteiro < self.tamanho_linha):
             self.token_atual = self.linha_atual[self.token_ponteiro]
             self.token_ponteiro += 1
         else:
-            self.token_ponteiro = 0
-            self.proxima_linha()
+            pass
+            # self.token_ponteiro = 0
+            # self.proxima_linha()
 
     def proxima_linha(self):
         if(self.linha_ponteiro  < self.quantidade_linhas):
