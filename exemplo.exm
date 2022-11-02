@@ -1,7 +1,7 @@
-INT a = 5.
-FLOAT teste = 2,1.
 COMECO
-    a = 2.
-    ESCREVER a + 2.
-    LER a.
+    INT a = 10.
+    INT b.
+    LER b.
+    a = a + b + c - 10.
+    ESCREVER a + 10.
 FINAL
