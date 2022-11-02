@@ -46,9 +46,6 @@ class Analisador:
 
     def comeco(self):
         self.executar_func(self.get_token_classe())
-        self.r_comeco()
-
-
 
     def f_int(self):
         self.executar_regra('id', 'Esperado variável')
