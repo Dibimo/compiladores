@@ -1,6 +1,7 @@
-INT a = 5.
-INT teste = 2.
 COMECO
-    a = teste - 10.
-    ESCREVER a.
+    INT a = 10.
+    INT b.
+    LER b.
+    a = a + b + c - 10.
+    ESCREVER a + 10.
 FINAL
